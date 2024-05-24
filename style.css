@@ -54,7 +54,7 @@ body{
     top: 0;
     left: 0;
     background: var(--light);
-    width: 230px;
+    width: 140px;
     height: 100%;
     z-index: 2000;
     overflow-x: hidden;
@@ -71,7 +71,7 @@ body{
 }
 
 .sidebar .logo{
-    font-size: 24px;
+    font-size: 1rem;
     font-weight: 700;
     height: 56px;
     display: flex;
@@ -90,18 +90,18 @@ body{
     min-width: 60px;
     display: flex;
     justify-content: center;
-    font-size: 2.2rem;
+    font-size: 1rem;
 }
 
 .sidebar .side-menu{
     width: 100%;
-    margin-top: 48px;
+    margin-top: 8px;
 }
 
 .sidebar .side-menu li{
     height: 48px;
     background: transparent;
-    margin-left: 6px;
+    margin-left: 4px;
     border-radius: 48px 0 0 48px;
     padding: 4px;
 }
@@ -142,7 +142,7 @@ body{
     display: flex;
     align-items: center;
     border-radius: 48px;
-    font-size: 16px;
+    font-size: 12px;
     color: var(--dark);
     white-space: nowrap;
     overflow-x: hidden;
@@ -150,7 +150,7 @@ body{
 }
 
 .sidebar .side-menu li.active a{
-    color: var(--success);
+    color: var(--primary);
 }
 
 .sidebar.close .side-menu li a{
@@ -161,7 +161,7 @@ body{
 .sidebar .side-menu li a .bx{
     min-width: calc(60px - ((4px + 6px) * 2));
     display: flex;
-    font-size: 1.6rem;
+    font-size: 0.9rem;
     justify-content: center;
 }
 
@@ -171,8 +171,8 @@ body{
 
 .content{
     position: relative;
-    width: calc(100% - 230px);
-    left: 230px;
+    width: calc(100% - 140px);
+    left: 140px;
     transition: all 0.3s ease;
 }
 
@@ -214,43 +214,10 @@ body{
     color: var(--dark);
 }
 
-.content nav form{
+.content nav h1{
     max-width: 400px;
     width: 100%;
     margin-right: auto;
-}
-
-.content nav form .form-input{
-    display: flex;
-    align-items: center;
-    height: 36px;
-}
-
-.content nav form .form-input input{
-    flex-grow: 1;
-    padding: 0 16px;
-    height: 100%;
-    border: none;
-    background: var(--grey);
-    border-radius: 36px 0 0 36px;
-    outline: none;
-    width: 100%;
-    color: var(--dark);
-}
-
-.content nav form .form-input button{
-    width: 80px;
-    height: 100%;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    background: var(--primary);
-    color: var(--light);
-    font-size: 18px;
-    border: none;
-    outline: none;
-    border-radius: 0 36px 36px 0;
-    cursor: pointer;
 }
 
 .content nav .notif{
@@ -452,51 +419,51 @@ body{
     cursor: pointer;
 }
 
-.content main .bottom-data .orders{
+.content main .bottom-data .history{
     flex-grow: 1;
     flex-basis: 500px;
 }
 
-.content main .bottom-data .orders table{
+.content main .bottom-data .history table{
     width: 100%;
     border-collapse: collapse;
 }
 
-.content main .bottom-data .orders table th{
+.content main .bottom-data .history table th{
     padding-bottom: 12px;
     font-size: 13px;
     text-align: left;
     border-bottom: 1px solid var(--grey);
 }
 
-.content main .bottom-data .orders table td{
+.content main .bottom-data .history table td{
     padding: 16px 0;
 }
 
-.content main .bottom-data .orders table tr td:first-child{
+.content main .bottom-data .history table tr td:first-child{
     display: flex;
     align-items: center;
     grid-gap: 12px;
     padding-left: 6px;
 }
 
-.content main .bottom-data .orders table td img{
+.content main .bottom-data .history table td img{
     width: 36px;
     height: 36px;
     border-radius: 50%;
     object-fit: cover;
 }
 
-.content main .bottom-data .orders table tbody tr{
+.content main .bottom-data .history table tbody tr{
     cursor: pointer;
     transition: all 0.3s ease;
 }
 
-.content main .bottom-data .orders table tbody tr:hover{
+.content main .bottom-data .history table tbody tr:hover{
     background: var(--grey);
 }
 
-.content main .bottom-data .orders table tr td .status{
+.content main .bottom-data .history table tr td .status{
     font-size: 10px;
     padding: 6px 16px;
     color: var(--light);
@@ -504,15 +471,15 @@ body{
     font-weight: 700;
 }
 
-.content main .bottom-data .orders table tr td .status.completed{
+.content main .bottom-data .history table tr td .status.completed{
     background: var(--success);
 }
 
-.content main .bottom-data .orders table tr td .status.process{
+.content main .bottom-data .history table tr td .status.process{
     background: var(--primary);
 }
 
-.content main .bottom-data .orders table tr td .status.pending{
+.content main .bottom-data .history table tr td .status.pending{
     background: var(--warning);
 }
 
@@ -575,11 +542,11 @@ body{
 
 @media screen and (max-width: 576px) {
     
-    .content nav form .form-input input{
+    .content nav h1 .form-input input{
         display: none;
     }
 
-    .content nav form .form-input button{
+    .content nav h1 .form-input button{
         width: auto;
         height: auto;
         background: transparent;
@@ -587,12 +554,12 @@ body{
         border-radius: none;
     }
 
-    .content nav form.show .form-input input{
+    .content nav h1.show .form-input input{
         display: block;
         width: 100%;
     }
 
-    .content nav form.show .form-input button{
+    .content nav h1.show .form-input button{
         width: 36px;
         height: 100%;
         color: var(--light);
@@ -600,7 +567,7 @@ body{
         border-radius: 0 36px 36px 0;
     }
 
-    .content nav form.show~.notif, .content nav form.show~.profile{
+    .content nav h1.show~.notif, .content nav h1.show~.profile{
         display: none;
     }
 
@@ -612,7 +579,7 @@ body{
         min-width: 340px;
     }
 
-    .content main .bottom-data .orders table{
+    .content main .bottom-data .history table{
         min-width: 340px;
     }
 

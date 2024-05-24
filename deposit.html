@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <title>Deposit - M-Banking</title>
+    <style>
+        /* Ensure dark mode is applied by default */
+        body {
+            opacity: 0;
+        }
+        body.dark {
+            opacity: 1;
+            transition: opacity 0.3s;
+        }
+    </style>
+</head>
+
+<body class="dark">
+
+    <!-- Main Content -->
+    <div class="content">
+        <!-- Navbar -->
+        <nav>
+            <i class='bx bx-menu'></i>
+            <h1 class="text-white">Deposit</h1>
+            <a href="#" class="notif">
+                <i class='bx bx-bell'></i>
+                <span class="count">12</span>
+            </a>
+            <a href="#" class="profile">
+                <img src="images/logo.png">
+            </a>
+        </nav>
+        <!-- End of Navbar -->
+
+        <main>
+            <div class="header">
+                <div class="left">
+                    <h1>Enter Deposit Amount</h1>
+                </div>
+            </div>
+
+            <div class="bottom-data justify-center text-center">
+                <input type="number" id="deposit-amount" class="w-5/12 bg-gray-700 p-5 rounded-full text-white" placeholder="Amount">
+                <button id="confirm-deposit" class="w-5/12 bg-blue-500 text-white py-2 px-4 rounded-full mt-5">Confirm</button>
+            </div>
+        </main>
+    </div>
+
+    <script src="index.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            document.body.classList.add('dark');
+            document.body.style.opacity = '1';
+        });
+
+        const toggler = document.getElementById('theme-toggle');
+
+        toggler.addEventListener('change', function () {
+            if (this.checked) {
+                document.body.classList.add('dark');
+            } else {
+                document.body.classList.remove('dark');
+            }
+        });
+    </script>
+</body>
+
+</html>
