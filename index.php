@@ -1,3 +1,18 @@
+<?php
+// Start session
+session_start();
+
+// Check if the user is logged in
+if (!isset($_SESSION['user_id'])) {
+    // Redirect the user to the login page if not logged in
+    header("Location: login.html");
+    exit();
+}
+
+// Include database connection
+include 'db.php';
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -53,12 +68,12 @@
             <li><a href="#"><i class='bx bx-wallet'></i>Wallet</a></li>
             <li><a href="/transaction.html"><i class='bx bx-transfer'></i>Transaction</a></li>
             <li><a href="#"><i class='bx bx-credit-card-alt'></i>Card</a></li>
-            <li><a href="#"><i class='bx bx-group'></i>Users</a></li>
+            <li><a href="#"><i class='bx bx-group'></i>Friends</a></li>
             <li><a href="#"><i class='bx bx-cog'></i>Settings</a></li>
         </ul>
         <ul class="side-menu">
             <li>
-                <a href="#" class="logout">
+                <a href="" class="logout">
                     <i class='bx bx-log-out-circle'></i>
                     Logout
                 </a>
@@ -72,7 +87,7 @@
         <!-- Navbar -->
         <nav>
             <i class='bx bx-menu'></i>
-            <h1 class="text-white">Welcome back, Devaara Zahwa</h1>
+            <h1 class="text-white">Welcome back, <?php echo $_SESSION['nama_depan']; ?> <?php echo $_SESSION['nama_belakang']; ?></h1>
             <a href="#" class="notif">
                 <i class='bx bx-bell'></i>
                 <span class="count">12</span>
