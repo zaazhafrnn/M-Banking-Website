@@ -20,31 +20,6 @@
 </head>
 
 <body class="dark">
-    <!-- Sidebar -->
-    <div class="sidebar">
-        <a href="#" class="logo">
-            <div class="logo-name ml-3"><span>M-</span>Banking</div>
-        </a>
-        <ul class="side-menu">
-            <li><a href="/index.html"><i class="bx bxs-dashboard"></i>Home</a></li>
-            <li><a href="#"><i class="bx bx-receipt"></i>History</a></li>
-            <li><a href="#"><i class="bx bx-wallet"></i>Wallet</a></li>
-            <li class="active"><a href="#"><i class="bx bx-transfer"></i>Transaction</a></li>
-            <li><a href="#"><i class="bx bx-credit-card-alt"></i>Card</a></li>
-            <li><a href="#"><i class="bx bx-group"></i>Users</a></li>
-            <li><a href="#"><i class="bx bx-cog"></i>Settings</a></li>
-        </ul>
-        <ul class="side-menu">
-            <li>
-                <a href="#" class="logout">
-                    <i class="bx bx-log-out-circle"></i>
-                    Logout
-                </a>
-            </li>
-        </ul>
-    </div>
-    <!-- End of Sidebar -->
-
     <!-- Main Content -->
     <div class="content">
         <!-- Navbar -->
@@ -61,6 +36,31 @@
         </nav>
         <!-- End of Navbar -->
 
+        <!-- Sidebar -->
+        <div class="sidebar">
+            <a href="#" class="logo">
+                <div class="logo-name ml-3"><span>M-</span>Banking</div>
+            </a>
+            <ul class="side-menu">
+                <li><a href="/index.html"><i class='bx bxs-dashboard'></i>Home</a></li>
+                <li><a href="#"><i class='bx bx-receipt'></i>History</a></li>
+                <li><a href="#"><i class='bx bx-wallet'></i>Wallet</a></li>
+                <li class="active"><a href="/transaction.html"><i class='bx bx-transfer'></i>Transaction</a></li>
+                <li><a href="#"><i class='bx bx-credit-card-alt'></i>Card</a></li>
+                <li><a href="#"><i class='bx bx-group'></i>Users</a></li>
+                <li><a href="#"><i class='bx bx-cog'></i>Settings</a></li>
+            </ul>
+            <ul class="side-menu">
+                <li>
+                    <a href="#" class="logout">
+                        <i class='bx bx-log-out-circle'></i>
+                        Logout
+                    </a>
+                </li>
+            </ul>
+        </div>
+        <!-- End of Sidebar -->
+        
         <main>
             <div class="header">
                 <div class="left">
@@ -82,32 +82,21 @@
                     <div class="text-white py-2 px-4 rounded">Withdrawal</div>
                 </button>
             </div>
-        </main>
-    </div>
-
-    <script>
-        document.addEventListener('DOMContentLoaded', () => {
-            document.body.classList.add('dark');
-            document.body.style.opacity = '1';
-
-            document.getElementById('deposit-button').addEventListener('click', () => {
-                window.location.href = 'deposit.html';
-            });
-
-            document.getElementById('withdraw-button').addEventListener('click', () => {
-                window.location.href = 'withdraw.html';
-            });
-        });
-
-        const toggler = document.getElementById('theme-toggle');
-
-        toggler.addEventListener('change', function () {
-            if (this.checked) {
+            
+        </main>   
+            <script>
+            document.addEventListener('DOMContentLoaded', () => {
                 document.body.classList.add('dark');
-            } else {
-                document.body.classList.remove('dark');
-            }
-        });
-    </script>
+                document.body.style.opacity = '1';
+            
+                document.getElementById('deposit-button').addEventListener('click', () => {
+                    window.location.href = 'deposit.html';
+                });
+            
+                document.getElementById('withdraw-button').addEventListener('click', () => {
+                    window.location.href = 'withdraw.html';
+                });
+            });
+            </script>
 </body>
 </html>

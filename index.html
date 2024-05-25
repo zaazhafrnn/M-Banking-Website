@@ -7,6 +7,7 @@
     <link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
     <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <title>M-Banking</title>
     <style>
         /* Ensure dark mode is applied by default */
@@ -18,10 +19,29 @@
             transition: opacity 0.3s;
         }
     </style>
+    <script>
+        $(document).ready(function () {
+            $.ajax({
+                url: 'get_balance.php',
+                type: 'GET',
+                dataType: 'json',
+                success: function (data) {
+                    if (data.error) {
+                        $('#balance').text('Error: ' + data.error);
+                    } else {
+                        $('#balance').text(data.saldo.toLocaleString('id-ID', { style: 'currency', currency: 'IDR' }));
+                    }
+                },
+                error: function (xhr, status, error) {
+                    console.log('Error:', error);
+                    $('#balance').text('Error loading balance');
+                }
+            });
+        });
+    </script>
 </head>
 
 <body class="dark">
-
     <!-- Sidebar -->
     <div class="sidebar">
         <a href="#" class="logo">
@@ -74,8 +94,8 @@
                 </div>
             </div>
 
-            <h1 class="text-white text-4xl mt-8">Your Balance Rp. 1.999.000,00</h1>
-            
+            <h1 class="text-white text-4xl mt-8">Your Balance Rp. <span id="balance">Loading...</span></h1>
+
             <div class="bottom-data">
                 <div class="history">
                     <div class="header">
@@ -133,7 +153,6 @@
                     </table>
                 </div>
             </div>
-            
         </main>
     </div>
 

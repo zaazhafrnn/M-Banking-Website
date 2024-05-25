@@ -38,6 +38,31 @@
         </nav>
         <!-- End of Navbar -->
 
+        <!-- Sidebar -->
+    <div class="sidebar">
+        <a href="#" class="logo">
+            <div class="logo-name ml-3"><span>M-</span>Banking</div>
+        </a>
+        <ul class="side-menu">
+            <li><a href="/index.html"><i class='bx bxs-dashboard'></i>Home</a></li>
+            <li><a href="#"><i class='bx bx-receipt'></i>History</a></li>
+            <li><a href="#"><i class='bx bx-wallet'></i>Wallet</a></li>
+            <li class="active"><a href="/transaction.html"><i class='bx bx-transfer'></i>Transaction</a></li>
+            <li><a href="#"><i class='bx bx-credit-card-alt'></i>Card</a></li>
+            <li><a href="#"><i class='bx bx-group'></i>Users</a></li>
+            <li><a href="#"><i class='bx bx-cog'></i>Settings</a></li>
+        </ul>
+        <ul class="side-menu">
+            <li>
+                <a href="#" class="logout">
+                    <i class='bx bx-log-out-circle'></i>
+                    Logout
+                </a>
+            </li>
+        </ul>
+    </div>
+    <!-- End of Sidebar -->
+
         <main>
             <div class="header">
                 <div class="left">
@@ -45,10 +70,24 @@
                 </div>
             </div>
 
-            <div class="bottom-data justify-center text-center">
-                <input type="number" id="deposit-amount" class="w-5/12 bg-gray-700 p-5 rounded-full text-white" placeholder="Amount">
-                <button id="confirm-deposit" class="w-5/12 bg-blue-500 text-white py-2 px-4 rounded-full mt-5">Confirm</button>
-            </div>
+            <form action="process_deposit.php" method="POST" class="bottom-data justify-center text-center">
+                <input
+                  type="number"
+                  id="amount"
+                  name="amount"
+                  class="w-5/12 bg-gray-700 p-5 rounded-full text-white"
+                  placeholder="Amount"
+                  required
+                />
+                <input type="hidden" name="no_rekening" value="550001"> <!-- Use actual account number -->
+                <button
+                  type="submit"
+                  id="confirm-deposit"
+                  class="w-5/12 bg-blue-500 text-white py-2 px-4 rounded-full mt-5"
+                >
+                  Confirm
+                </button>
+              </form>
         </main>
     </div>
 
