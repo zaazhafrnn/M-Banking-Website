@@ -1,10 +1,7 @@
 <?php
-// Start session
 session_start();
 
-// Check if the user is logged in
 if (!isset($_SESSION['user_id'])) {
-    // Redirect the user to the login page if not logged in
     header("Location: login.html");
     exit();
 }
@@ -66,7 +63,7 @@ include 'db.php';
             <li class="active"><a href=""><i class='bx bxs-dashboard'></i>Home</a></li>
             <li><a href="#"><i class='bx bx-receipt'></i>History</a></li>
             <li><a href="#"><i class='bx bx-wallet'></i>Wallet</a></li>
-            <li><a href="/transaction.html"><i class='bx bx-transfer'></i>Transaction</a></li>
+            <li><a href="/transaction.php"><i class='bx bx-transfer'></i>Transaction</a></li>
             <li><a href="#"><i class='bx bx-credit-card-alt'></i>Card</a></li>
             <li><a href="#"><i class='bx bx-group'></i>Friends</a></li>
             <li><a href="#"><i class='bx bx-cog'></i>Settings</a></li>
