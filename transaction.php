@@ -43,7 +43,7 @@ $account_number = $_SESSION['account_number'];
                 <span class="count">12</span>
             </a>
             <a href="#" class="profile">
-                <img src="images/logo.png">
+                <!-- <img src="images/logo.png"> -->
             </a>
         </nav>
         <!-- End of Navbar -->
@@ -57,7 +57,8 @@ $account_number = $_SESSION['account_number'];
                 <li><a href="/index.php"><i class='bx bxs-dashboard'></i>Home</a></li>
                 <li><a href="#"><i class='bx bx-receipt'></i>History</a></li>
                 <li><a href="#"><i class='bx bx-wallet'></i>Wallet</a></li>
-                <li class="active"><a href="/transaction.html"><i class='bx bx-transfer'></i>Transaction</a></li>
+                <li class="active"><a href="/transaction.php"><i class='bx bx-transfer bx-rotate-90'></i>Transaction</a></li>
+                <li><a href="/transfer.php"><i class='bx bx-paper-plane' style='color:#ffffff'  ></i>Transfer</a></li>
                 <li><a href="#"><i class='bx bx-credit-card-alt'></i>Card</a></li>
                 <li><a href="#"><i class='bx bx-group'></i>Friends</a></li>
                 <li><a href="#"><i class='bx bx-cog'></i>Settings</a></li>

@@ -48,7 +48,7 @@ include 'session.php';
                 dataType: 'json',
                 success: function (data) {
                     if (data.error) {
-                        $('#transaction-history').html('<tr><td colspan="3">Error: ' + data.error + '</td></tr>');
+                        $('#transaction-history').html('<tr><td colspan="4">Error: ' + data.error + '</td></tr>');
                     } else {
                         var transactionRows = '';
                         data.forEach(function (transaction) {
@@ -66,6 +66,7 @@ include 'session.php';
                                         <p>${transaction.deskripsi}</p>
                                     </td>
                                     <td><span class="${amountClass}">${amount}</span></td>
+                                    <!-- <td>#${transaction.transaksi_id}</td> --!> 
                                 </tr>
                             `;
                         });
@@ -74,7 +75,7 @@ include 'session.php';
                 },
                 error: function (xhr, status, error) {
                     console.log('Error:', error);
-                    $('#transaction-history').html('<tr><td colspan="3">Error loading transactions</td></tr>');
+                    $('#transaction-history').html('<tr><td colspan="4">Error loading transactions</td></tr>');
                 }
             });
         });
@@ -92,7 +93,8 @@ include 'session.php';
             <li class="active"><a href=""><i class='bx bxs-dashboard'></i>Home</a></li>
             <li><a href="#"><i class='bx bx-receipt'></i>History</a></li>
             <li><a href="#"><i class='bx bx-wallet'></i>Wallet</a></li>
-            <li><a href="/transaction.php"><i class='bx bx-transfer'></i>Transaction</a></li>
+            <li><a href="/transaction.php"><i class='bx bx-transfer bx-rotate-90'></i>Transaction</a></li>
+            <li><a href="/transfer.php"><i class='bx bx-paper-plane' style='color:#ffffff'  ></i>Transfer</a></li>
             <li><a href="#"><i class='bx bx-credit-card-alt'></i>Card</a></li>
             <li><a href="#"><i class='bx bx-group'></i>Friends</a></li>
             <li><a href="#"><i class='bx bx-cog'></i>Settings</a></li>
@@ -120,7 +122,6 @@ include 'session.php';
                 <span class="count">12</span>
             </a>
             <a href="#" class="profile">
-                <img src="images/logo.png">
             </a>
         </nav>
         <!-- End of Navbar -->
