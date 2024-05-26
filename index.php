@@ -1,13 +1,5 @@
 <?php
-session_start();
-
-if (!isset($_SESSION['user_id'])) {
-    header("Location: login.html");
-    exit();
-}
-
-// Include database connection
-include 'db.php';
+include 'session.php';
 ?>
 
 <!DOCTYPE html>
@@ -83,9 +75,10 @@ include 'db.php';
     <div class="content">
         <!-- Navbar -->
         <nav>
-            <i class='bx bx-menu'></i>
-            <h1 class="text-white">Welcome back, <?php echo $_SESSION['nama_depan']; ?> <?php echo $_SESSION['nama_belakang']; ?></h1>
-            <a href="#" class="notif">
+        <i class='bx bx-menu'></i>
+        <h1 class="text-white">Welcome back, <?php echo $_SESSION['nama_depan']; ?> <?php echo $_SESSION['nama_belakang']; ?></h1>
+        <p class="text-white">Account Number: <?php echo $_SESSION['account_number']; ?></p>
+        <a href="#" class="notif">
                 <i class='bx bx-bell'></i>
                 <span class="count">12</span>
             </a>
