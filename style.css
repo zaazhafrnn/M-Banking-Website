@@ -480,7 +480,7 @@ body{
 }
 
 .content main .bottom-data .history table tr td .status.pending{
-    background: var(--warning);
+    background: var(--danger);
 }
 
 .content main .bottom-data .reminders{

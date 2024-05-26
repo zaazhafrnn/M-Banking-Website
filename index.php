@@ -41,7 +41,44 @@ include 'session.php';
                     $('#balance').text('Error loading balance');
                 }
             });
+
+            $.ajax({
+                url: 'get_transactions.php',
+                type: 'GET',
+                dataType: 'json',
+                success: function (data) {
+                    if (data.error) {
+                        $('#transaction-history').html('<tr><td colspan="3">Error: ' + data.error + '</td></tr>');
+                    } else {
+                        var transactionRows = '';
+                        data.forEach(function (transaction) {
+                            var date = new Date(transaction.tanggal).toLocaleString('id-ID');
+                            var amountClass = transaction.jumlah > 0 ? 'status completed' : 'status pending';
+                            var amount = (transaction.jumlah > 0 ? '+ ' : '- ') + 'Rp. ' + Math.abs(transaction.jumlah).toLocaleString('id-ID');
+                            transactionRows += `
+                                <tr class="border-b-2 border-gray-700">
+                                    <td>
+                                        <div class="flex flex-col items-center">
+                                            <span>${date}</span>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <p>${transaction.deskripsi}</p>
+                                    </td>
+                                    <td><span class="${amountClass}">${amount}</span></td>
+                                </tr>
+                            `;
+                        });
+                        $('#transaction-history').html(transactionRows);
+                    }
+                },
+                error: function (xhr, status, error) {
+                    console.log('Error:', error);
+                    $('#transaction-history').html('<tr><td colspan="3">Error loading transactions</td></tr>');
+                }
+            });
         });
+
     </script>
 </head>
 
@@ -62,7 +99,7 @@ include 'session.php';
         </ul>
         <ul class="side-menu">
             <li>
-                <a href="" class="logout">
+                <a href="logout.php" class="logout">
                     <i class='bx bx-log-out-circle'></i>
                     Logout
                 </a>
@@ -117,43 +154,8 @@ include 'session.php';
                                 <th>Allocation</th>
                             </tr> -->
                         </thead>
-                        <tbody class="text-sm">
-                            <tr class="border-b-2 border-gray-700">
-                                <td>
-                                    <div class="flex flex-col items-center">
-                                        <span>Today</span>
-                                        <span>12.30PM</span>
-                                    </div>
-                                </td>
-                                <td>
-                                    <p>Deposit</p>
-                                </td>
-                                <td><span class="status completed">+ Rp. 1000,00</span></td>
-                            </tr>
-                            <tr class="border-b-2 border-gray-700">
-                                <td>
-                                    <div class="flex flex-col items-center">
-                                        <span>Yesterday</span>
-                                        <span>14.10PM</span>
-                                    </div>
-                                </td>
-                                <td>
-                                    <p>Payment Shopping</p>
-                                </td>
-                                <td><span class="status pending">- Rp. 2000,00</span></td>
-                            </tr>
-                            <tr class="border-b-2 border-gray-700">
-                                <td>
-                                    <div class="flex flex-col items-center">
-                                        <span>Wednesday</span>
-                                        <span>10.00PM</span>
-                                    </div>
-                                </td>
-                                <td>
-                                    <p>Received Transfer</p>
-                                </td>
-                                <td><span class="status process">+ Rp. 10.000,00</span></td>
-                            </tr>
+                        <tbody id="transaction-history" class="text-sm">
+                            <!-- Transactions will be loaded here via AJAX -->
                         </tbody>
                     </table>
                 </div>

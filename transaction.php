@@ -64,7 +64,7 @@ $account_number = $_SESSION['account_number'];
             </ul>
             <ul class="side-menu">
                 <li>
-                    <a href="#" class="logout">
+                    <a href="logout.php" class="logout">
                         <i class='bx bx-log-out-circle'></i>
                         Logout
                     </a>
