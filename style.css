@@ -169,6 +169,25 @@ body{
     color: var(--danger);
 }
 
+.message {
+    position: fixed;
+    top: 60px;
+    right: 30px;
+    padding: 10px 20px;
+    border-radius: 5px;
+    z-index: 1000;
+}
+
+.message.success {
+    background-color: green;
+    color: white;
+}
+
+.message.error {
+    background-color: red;
+    color: white;
+}
+
 .content{
     position: relative;
     width: calc(100% - 140px);

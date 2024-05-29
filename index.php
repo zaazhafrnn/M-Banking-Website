@@ -1,5 +1,9 @@
 <?php
 include 'session.php';
+
+// Check for status and message in the query parameters
+$status = isset($_GET['status']) ? $_GET['status'] : '';
+$message = isset($_GET['message']) ? urldecode($_GET['message']) : '';
 ?>
 
 <!DOCTYPE html>
@@ -84,6 +88,19 @@ include 'session.php';
 </head>
 
 <body class="dark">
+
+    <?php if ($status && $message): ?>
+        <div class="message <?php echo htmlspecialchars($status); ?>">
+            <p><?php echo htmlspecialchars($message); ?></p>
+        </div>
+        <script>
+            // Automatically hide the message after a few seconds
+            setTimeout(function() {
+                document.querySelector('.message').style.display = 'none';
+            }, 5000);
+        </script>
+    <?php endif; ?>    
+
     <!-- Sidebar -->
     <div class="sidebar">
         <a href="#" class="logo">
@@ -95,7 +112,7 @@ include 'session.php';
             <li><a href="#"><i class='bx bx-wallet'></i>Wallet</a></li>
             <li><a href="/transaction.php"><i class='bx bx-transfer bx-rotate-90'></i>Transaction</a></li>
             <li><a href="/transfer.php"><i class='bx bx-paper-plane' style='color:#ffffff'  ></i>Transfer</a></li>
-            <li><a href="#"><i class='bx bx-credit-card-alt'></i>Card</a></li>
+            <li><a href="#"><i class='bx bx-credit-card-alt'></i>My Cards</a></li>
             <li><a href="#"><i class='bx bx-group'></i>Friends</a></li>
             <li><a href="#"><i class='bx bx-cog'></i>Settings</a></li>
         </ul>

@@ -1,11 +1,5 @@
 <?php
-session_start();
-
-// Check if the user is logged in
-if (!isset($_SESSION['user_id'])) {
-    header("Location: login.php");
-    exit();
-}
+include 'session.php';
 
 // Get the account number from the session
 $account_number = $_SESSION['account_number'];
@@ -58,8 +52,8 @@ $account_number = $_SESSION['account_number'];
                 <li><a href="#"><i class='bx bx-receipt'></i>History</a></li>
                 <li><a href="#"><i class='bx bx-wallet'></i>Wallet</a></li>
                 <li class="active"><a href="/transaction.php"><i class='bx bx-transfer bx-rotate-90'></i>Transaction</a></li>
-                <li><a href="/transfer.php"><i class='bx bx-paper-plane' style='color:#ffffff'  ></i>Transfer</a></li>
-                <li><a href="#"><i class='bx bx-credit-card-alt'></i>Card</a></li>
+                <li><a href="/transfer.php"><i class='bx bx-paper-plane' style='color:#ffffff'></i>Transfer</a></li>
+                <li><a href="#"><i class='bx bx-credit-card-alt'></i>My Cards</a></li>
                 <li><a href="#"><i class='bx bx-group'></i>Friends</a></li>
                 <li><a href="#"><i class='bx bx-cog'></i>Settings</a></li>
             </ul>
@@ -78,48 +72,22 @@ $account_number = $_SESSION['account_number'];
             <div class="header">
                 <div class="left">
                     <h1>Transaction</h1>
+                    <ul class="breadcrumb">
+                        /
+                        <li><a href="#" class="active">Transaction</a></li>
+                    </ul>
                 </div>
             </div>
 
-            <form action="process_transaction.php" method="POST" class="bottom-data justify-center text-center">
-                <input
-                    type="number"
-                    id="amount"
-                    name="amount"
-                    class="w-5/12 bg-gray-700 p-5 rounded-full text-white"
-                    placeholder="Amount"
-                    required
-                />
-                <input type="hidden" name="account_number" value=<?php echo $account_number; ?>> <!-- Use actual account number -->
-                <input type="hidden" name="type" value="deposit"> <!-- Deposit type -->
-                <button
-                    type="submit"
-                    id="confirm-deposit"
-                    class="w-5/12 bg-blue-500 text-white py-2 px-4 rounded-full mt-5"
-                >
+            <div class="bottom-data justify-center text-center">
+                <h2 class="text-white text-2xl mb-5">Choose Transaction Type</h2>
+                <a href="deposit.php" class="w-5/12 bg-blue-500 text-white py-2 px-4 rounded-full mt-5 inline-block">
                     Deposit
-                </button>
-            </form>
-
-            <form action="process_transaction.php" method="POST" class="bottom-data justify-center text-center">
-                <input
-                    type="number"
-                    id="amount"
-                    name="amount"
-                    class="w-5/12 bg-gray-700 p-5 rounded-full text-white"
-                    placeholder="Amount"
-                    required
-                />
-                <input type="hidden" name="account_number" value=<?php echo $account_number; ?>> <!-- Use actual account number -->
-                <input type="hidden" name="type" value="withdrawal"> <!-- Withdrawal type -->
-                <button
-                    type="submit"
-                    id="confirm-withdrawal"
-                    class="w-5/12 bg-red-500 text-white py-2 px-4 rounded-full mt-5"
-                >
+                </a>
+                <a href="withdrawal.php" class="w-5/12 bg-red-500 text-white py-2 px-4 rounded-full mt-5 inline-block">
                     Withdrawal
-                </button>
-            </form>
+                </a>
+            </div>
         </main>
     </div>
 

@@ -2,7 +2,6 @@
 error_reporting(E_ALL);
 ini_set('display_errors', 1);
 header("Access-Control-Allow-Origin: *");
-header("Content-Type: application/json");
 include 'db.php';
 
 // Start the session
@@ -25,7 +24,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $stmt->close();
 
         if (!$no_rekening) {
-            echo json_encode(array('error' => 'Invalid account number'));
+            header("Location: index.php?status=error&message=Invalid+account+number");
             exit;
         }
 
@@ -34,14 +33,14 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $sql = "UPDATE rekening SET saldo = saldo + ? WHERE id = ?";
             $stmt = $conn->prepare($sql);
             $stmt->bind_param("di", $amount, $no_rekening);
-            $transaction_type = 'Setor';
-            $description = 'Setor Tunai';
+            $transaction_type = 'Deposit';
+            $description = 'Deposit into account';
         } else {
             $sql = "UPDATE rekening SET saldo = saldo - ? WHERE id = ?";
             $stmt = $conn->prepare($sql);
             $stmt->bind_param("di", $amount, $no_rekening);
-            $transaction_type = 'Tarik';
-            $description = 'Tarik Tunai';
+            $transaction_type = 'Withdrawal';
+            $description = 'Withdraw a cash';
         }
 
         // Execute the balance update transaction
@@ -63,19 +62,19 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $stmt->bind_param("iisds", $new_transaksi_id, $no_rekening, $transaction_type, $transaction_amount, $description);
 
             if ($stmt->execute()) {
-                echo json_encode(array('message' => $transaction_type . ' successful'));
+                header("Location: index.php?status=success&message=" . $transaction_type . "+successful");
             } else {
-                echo json_encode(array('error' => 'Failed to record transaction'));
+                header("Location: index.php?status=error&message=Failed+to+record+transaction");
             }
             $stmt->close();
         } else {
-            echo json_encode(array('error' => 'Failed to process ' . $transaction_type));
+            header("Location: index.php?status=error&message=Failed+to+process+" . $transaction_type);
         }
     } else {
-        echo json_encode(array('error' => 'Missing parameters'));
+        header("Location: index.php?status=error&message=Missing+parameters");
     }
 } else {
-    echo json_encode(array('error' => 'Invalid request method'));
+    header("Location: index.php?status=error&message=Invalid+request+method");
 }
 
 $conn->close();
