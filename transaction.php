@@ -20,7 +20,7 @@ ob_start();
     </div>
 
     <div class="bottom-data justify-center text-center">
-        <h2 class="text-white text-2xl mb-5">Choose Transaction Type</h2>
+        <h2 class="text-yellow text-2xl mb-5">Choose Transaction Type</h2>
         <a href="deposit.php" class="w-5/12 bg-blue-500 text-white py-2 px-4 rounded-full mt-5 inline-block">
             Deposit
         </a>

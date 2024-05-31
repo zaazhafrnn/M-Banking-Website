@@ -1,8 +1,13 @@
 <?php
 include 'session.php';
+// include 'db.php';
+include 'get_account.php'; // Correct path to include
 
 $status = isset($_GET['status']) ? $_GET['status'] : '';
 $message = isset($_GET['message']) ? urldecode($_GET['message']) : '';
+
+$user_id = $_SESSION['user_id'];
+$accounts = getUserAccounts($user_id, $conn); // Fetch user accounts
 
 $title = "Home";
 ob_start();
@@ -30,9 +35,17 @@ ob_start();
         </div>
     </div>
 
-    <h1 class="text-white text-4xl mt-8">Your Balance Rp. <span id="balance">Loading...</span></h1>
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mt-8">
+        <?php foreach ($accounts as $account): ?>
+            <div class="bg-gray-800 p-6 rounded-lg shadow-md">
+                <h2 class="text-xl font-semibold text-white"><?php echo htmlspecialchars($account['bank']); ?></h2>
+                <h2 class="text-xl font-semibold text-white">Account Number: <?php echo htmlspecialchars($account['no_rekening']); ?></h2>
+                <p class="text-white mt-2">Balance: Rp. <?php echo number_format($account['saldo'], 2, ',', '.'); ?></p>
+            </div>
+        <?php endforeach; ?>
+    </div>
 
-    <div class="bottom-data">
+    <div class="bottom-data mt-8">
         <div class="history">
             <div class="header">
                 <i class='bx bx-receipt'></i>

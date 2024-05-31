@@ -13,7 +13,7 @@ if (!isset($_SESSION['user_id'])) {
 include 'db.php';
 
 // Retrieve account number from session
-$account_number = $_SESSION['account_number'];
+// $account_number = $_SESSION['account_number'];
 
 // Prepare SQL statement to fetch balance
 $sql = "SELECT saldo FROM rekening WHERE no_rekening = ?";

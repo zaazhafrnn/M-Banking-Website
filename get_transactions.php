@@ -5,35 +5,47 @@ header("Access-Control-Allow-Origin: *");
 header("Content-Type: application/json");
 include 'db.php';
 
-// Start the session
 session_start();
 
-if (!isset($_SESSION['account_number'])) {
+if (!isset($_SESSION['user_id'])) {
     echo json_encode(array('error' => 'Not logged in'));
     exit;
 }
 
-// Get the account number from the session
-$account_number = $_SESSION['account_number'];
+$user_id = $_SESSION['user_id'];
 
-// Fetch transactions for the given account number
-$sql = "SELECT t.transaksi_id, t.no_rekening, t.tipe_transaksi, t.jumlah, t.deskripsi, t.tanggal
-        FROM transaksi t
+// No need to fetch account numbers separately
+$sql_transactions = "
+    SELECT 
+        t.transaksi_id, 
+        r.no_rekening, 
+        t.tipe_transaksi, 
+        t.jumlah, 
+        t.deskripsi, 
+        t.tanggal,
+        r.bank
+    FROM 
+        transaksi t
         JOIN rekening r ON t.no_rekening = r.id
-        WHERE r.no_rekening = ?
-        ORDER BY t.tanggal DESC";
-$stmt = $conn->prepare($sql);
-$stmt->bind_param("s", $account_number);
-$stmt->execute();
-$result = $stmt->get_result();
+    WHERE 
+        r.user_id = ?
+    ORDER BY 
+        t.tanggal DESC
+    LIMIT 10";
+
+$stmt_transactions = $conn->prepare($sql_transactions);
+$stmt_transactions->bind_param("i", $user_id);
+$stmt_transactions->execute();
+$result_transactions = $stmt_transactions->get_result();
 
 $transactions = array();
-while ($row = $result->fetch_assoc()) {
+while ($row = $result_transactions->fetch_assoc()) {
     $transactions[] = $row;
 }
 
-echo json_encode($transactions);
+$stmt_transactions->close();
 
-$stmt->close();
+echo json_encode(empty($transactions) ? array('error' => 'No transactions found') : $transactions);
+
 $conn->close();
 ?>
