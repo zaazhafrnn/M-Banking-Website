@@ -10,14 +10,17 @@ ob_start();
 <main class="min-h-screen bg-gray-100 dark:bg-gray-900">
     <div class="container mx-auto px-4 py-8">
         <div class="max-w-lg mx-auto bg-white dark:bg-gray-800 rounded-lg shadow-md p-6">
+            <div class="progress-bar mt-1">
+                <div class="w-full bg-gray-200 rounded-full h-2.5">
+                    <div class="bg-blue-600 h-2.5 rounded-full" style="width: 28%;"></div>
+                </div>
+                <div class="flex justify-between text-sm text-gray-500 mt-1 mb-8">
+                    <div>Input Amount</div>
+                    <div>Step 1 of 3</div>
+                </div>
+            </div>
             <div class="header mb-6">
                 <h1 class="text-2xl font-bold text-gray-900 dark:text-white"><?php echo ucfirst($type); ?> Amount</h1>
-                <div class="progress-bar mt-4">
-                    <div class="w-full bg-gray-200 rounded-full h-2.5">
-                        <div class="bg-blue-600 h-2.5 rounded-full" style="width: 33%;"></div>
-                    </div>
-                    <div class="text-right text-sm text-gray-500 mt-1">Step 1 of 3</div>
-                </div>
             </div>
             <form action="transaction_account.php" method="GET" class="space-y-4">
                 <input type="hidden" name="type" value="<?php echo htmlspecialchars($type); ?>">

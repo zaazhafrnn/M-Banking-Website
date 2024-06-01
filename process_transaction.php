@@ -24,21 +24,20 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             exit();
         }
 
-        // Determine if it's a deposit or a withdrawal
         if ($type == 'deposit') {
             $sql = "UPDATE rekening SET saldo = saldo + ? WHERE id = ?";
             $transaction_type = 'Deposit';
             $description = 'Deposit into account';
             
             $stmt = $conn->prepare($sql);
-            $stmt->bind_param("di", $amount, $account_id); // Only two parameters for deposit
+            $stmt->bind_param("di", $amount, $account_id);
         } else {
             $sql = "UPDATE rekening SET saldo = saldo - ? WHERE id = ? AND saldo >= ?";
             $transaction_type = 'Withdrawal';
             $description = 'Withdraw cash';
             
             $stmt = $conn->prepare($sql);
-            $stmt->bind_param("dii", $amount, $account_id, $amount); // Three parameters for withdrawal
+            $stmt->bind_param("dii", $amount, $account_id, $amount);
         }
 
         // Execute the balance update transaction
