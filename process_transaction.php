@@ -1,46 +1,44 @@
 <?php
+include "session.php";
 error_reporting(E_ALL);
 ini_set('display_errors', 1);
 header("Access-Control-Allow-Origin: *");
-include 'db.php';
 
-// Start the session
-session_start();
-
-// Check if the form has been submitted
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    // Check if 'amount' and 'account_number' are set in the POST data
-    if (isset($_POST['amount']) && isset($_POST['account_number'])) {
-        $amount = $_POST['amount'];
-        $account_number = $_POST['account_number'];
+    if (isset($_POST['pin']) && isset($_SESSION['transaction'])) {
+        $pin = $_POST['pin']; 
+        $account_id = $_SESSION['transaction']['account_id'];
+        $type = $_SESSION['transaction']['type'];
+        $amount = $_SESSION['transaction']['amount'];
 
-        // Get the no_rekening (id from rekening table) for the account_number
-        $sql = "SELECT id FROM rekening WHERE no_rekening = ?";
-        $stmt = $conn->prepare($sql);
-        $stmt->bind_param("s", $account_number);
+        // Retrieve the PIN associated with the user's account
+        $stmt = $conn->prepare("SELECT pin, no_rekening FROM rekening WHERE id = ?");
+        $stmt->bind_param("i", $account_id);
         $stmt->execute();
-        $stmt->bind_result($no_rekening);
+        $stmt->bind_result($stored_pin, $account_number);
         $stmt->fetch();
         $stmt->close();
 
-        if (!$no_rekening) {
-            header("Location: index.php?status=error&message=Invalid+account+number");
-            exit;
+        if (strval($pin) !== strval($stored_pin)) {
+            header("Location: index.php?status=error&message=Invalid+PIN");
+            exit();
         }
 
         // Determine if it's a deposit or a withdrawal
-        if (isset($_POST['type']) && $_POST['type'] == 'deposit') {
+        if ($type == 'deposit') {
             $sql = "UPDATE rekening SET saldo = saldo + ? WHERE id = ?";
-            $stmt = $conn->prepare($sql);
-            $stmt->bind_param("di", $amount, $no_rekening);
             $transaction_type = 'Deposit';
             $description = 'Deposit into account';
-        } else {
-            $sql = "UPDATE rekening SET saldo = saldo - ? WHERE id = ?";
+            
             $stmt = $conn->prepare($sql);
-            $stmt->bind_param("di", $amount, $no_rekening);
+            $stmt->bind_param("di", $amount, $account_id); // Only two parameters for deposit
+        } else {
+            $sql = "UPDATE rekening SET saldo = saldo - ? WHERE id = ? AND saldo >= ?";
             $transaction_type = 'Withdrawal';
-            $description = 'Withdraw a cash';
+            $description = 'Withdraw cash';
+            
+            $stmt = $conn->prepare($sql);
+            $stmt->bind_param("dii", $amount, $account_id, $amount); // Three parameters for withdrawal
         }
 
         // Execute the balance update transaction
@@ -56,10 +54,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $new_transaksi_id = $max_transaksi_id ? $max_transaksi_id + 1 : 1;
 
             // Insert the transaction record into the transaksi table
-            $transaction_amount = (isset($_POST['type']) && $_POST['type'] == 'deposit') ? $amount : -$amount;
-            $sql = "INSERT INTO transaksi (transaksi_id, no_rekening, tipe_transaksi, jumlah, deskripsi) VALUES (?, ?, ?, ?, ?)";
-            $stmt = $conn->prepare($sql);
-            $stmt->bind_param("iisds", $new_transaksi_id, $no_rekening, $transaction_type, $transaction_amount, $description);
+            $transaction_amount = ($type == 'deposit') ? $amount : -$amount;
+            $stmt = $conn->prepare("INSERT INTO transaksi (transaksi_id, no_rekening, tipe_transaksi, jumlah, deskripsi) VALUES (?, ?, ?, ?, ?)");
+            $stmt->bind_param("iisds", $new_transaksi_id, $account_id, $transaction_type, $transaction_amount, $description);
 
             if ($stmt->execute()) {
                 header("Location: index.php?status=success&message=" . $transaction_type . "+successful");

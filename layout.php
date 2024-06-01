@@ -23,7 +23,6 @@
 
     <script src="index.js"></script>
     <script>
-        console.log('Custom script loaded');
         $(document).ready(function () {
             document.body.classList.add('dark');
             document.body.style.opacity = '1';
@@ -34,7 +33,7 @@
                 type: 'GET',
                 dataType: 'json',
                 success: function (data) {
-                    console.log(data);
+                    // console.log(data);
                     if (data.error) {
                         $('#transaction-history').html('<tr><td colspan="4" class="py-4 text-center text-gray-400">' + data.error + '</td></tr>');
                     } else {

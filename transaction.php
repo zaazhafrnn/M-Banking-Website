@@ -1,9 +1,6 @@
 <?php
 include 'session.php';
 
-// Get the account number from the session
-$account_number = $_SESSION['account_number'];
-
 $title = "Transaction";
 ob_start();
 ?>
@@ -21,10 +18,10 @@ ob_start();
 
     <div class="bottom-data justify-center text-center">
         <h2 class="text-yellow text-2xl mb-5">Choose Transaction Type</h2>
-        <a href="deposit.php" class="w-5/12 bg-blue-500 text-white py-2 px-4 rounded-full mt-5 inline-block">
+        <a href="transaction_amount.php?type=deposit" class="w-5/12 bg-blue-500 text-white py-2 px-4 rounded-full mt-5 inline-block">
             Deposit
         </a>
-        <a href="withdrawal.php" class="w-5/12 bg-red-500 text-white py-2 px-4 rounded-full mt-5 inline-block">
+        <a href="transaction_amount.php?type=withdrawal" class="w-5/12 bg-red-500 text-white py-2 px-4 rounded-full mt-5 inline-block">
             Withdrawal
         </a>
     </div>

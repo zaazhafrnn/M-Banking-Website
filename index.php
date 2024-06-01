@@ -1,13 +1,13 @@
 <?php
 include 'session.php';
 // include 'db.php';
-include 'get_account.php'; // Correct path to include
+include 'get_account.php';
 
 $status = isset($_GET['status']) ? $_GET['status'] : '';
 $message = isset($_GET['message']) ? urldecode($_GET['message']) : '';
 
 $user_id = $_SESSION['user_id'];
-$accounts = getUserAccounts($user_id, $conn); // Fetch user accounts
+$accounts = getUserAccounts($user_id, $conn);
 
 $title = "Home";
 ob_start();
