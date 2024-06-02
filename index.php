@@ -45,7 +45,7 @@ ob_start();
         <?php endforeach; ?>
     </div>
 
-    <div class="bottom-data mt-8">
+    <div class="bottom-data mt-8 pb-10">
         <div class="history">
             <div class="header">
                 <i class='bx bx-receipt'></i>

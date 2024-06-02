@@ -11,7 +11,7 @@ $current_page = basename($_SERVER['PHP_SELF']);
         <li class="<?php echo ($current_page == 'index.php') ? 'active' : ''; ?>"><a href="index.php"><i class='bx bxs-dashboard'></i>Home</a></li>
         <li class="<?php echo ($current_page == 'history.php') ? 'active' : ''; ?>"><a href="history.php"><i class='bx bx-receipt'></i>History</a></li>
         <li class="<?php echo ($current_page == 'wallet.php') ? 'active' : ''; ?>"><a href="wallet.php"><i class='bx bx-wallet'></i>Wallet</a></li>
-        <li class="<?php echo in_array($current_page, ['transaction.php', 'deposit.php', 'withdrawal.php']) ? 'active' : ''; ?>">
+        <li class="<?php echo in_array($current_page, ['transaction.php', 'deposit.php', 'withdrawal.php', 'transaction_amount.php', 'transaction_account.php', 'transaction_pin.php']) ? 'active' : ''; ?>">
             <a href="transaction.php"><i class='bx bx-transfer bx-rotate-90'></i>Transaction</a>
         </li>
         <li class="<?php echo ($current_page == 'transfer.php') ? 'active' : ''; ?>"><a href="transfer.php"><i class='bx bx-paper-plane'></i>Transfer</a></li>

@@ -58,6 +58,14 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $stmt->bind_param("iisds", $new_transaksi_id, $account_id, $transaction_type, $transaction_amount, $description);
 
             if ($stmt->execute()) {
+                // Store transaction details in the session for the receipt page
+                $_SESSION['transaction']['id'] = $new_transaksi_id;
+                $_SESSION['transaction']['time'] = $transaction_time;
+                $_SESSION['transaction']['description'] = $description;
+                $_SESSION['transaction']['amount'] = $amount;
+                $_SESSION['transaction']['account_id'] = $account_id;
+
+                // header("Location: receipt.php");
                 header("Location: index.php?status=success&message=" . $transaction_type . "+successful");
             } else {
                 header("Location: index.php?status=error&message=Failed+to+record+transaction");

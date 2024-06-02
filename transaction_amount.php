@@ -3,12 +3,23 @@
 include 'session.php';
 
 $type = $_GET['type']; // deposit or withdrawal
-$title = ucfirst($type) . " Amount";
+$title = ucfirst($type);
 ob_start();
 ?>
 
-<main class="min-h-screen bg-gray-100 dark:bg-gray-900">
-    <div class="container mx-auto px-4 py-8">
+<main class="h-screen bg-gray-900">
+    <div class="header">
+        <div class="left">
+            <h1>Deposit</h1>
+            <ul class="breadcrumb">
+                /
+                <li><a href="#">Transaction</a></li>
+                <li><a href="#" class="active">Deposit</a></li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="container mx-auto px-4 my-auto">
         <div class="max-w-lg mx-auto bg-white dark:bg-gray-800 rounded-lg shadow-md p-6">
             <div class="progress-bar mt-1">
                 <div class="w-full bg-gray-200 rounded-full h-2.5">
