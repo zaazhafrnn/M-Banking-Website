@@ -33,7 +33,7 @@ ob_start();
             <div class="header mb-6">
                 <h1 class="text-2xl font-bold text-gray-900 dark:text-white"><?php echo ucfirst($type); ?> Amount</h1>
             </div>
-            <form action="transaction_account.php" method="GET" class="space-y-4">
+            <form action="confirm_account.php" method="GET" class="space-y-4">
                 <input type="hidden" name="type" value="<?php echo htmlspecialchars($type); ?>">
                 <div>
                     <label for="amount" class="block text-sm font-medium text-gray-300">Enter Amount:</label>

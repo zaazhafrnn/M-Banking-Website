@@ -5,6 +5,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $type = $_POST['type'];
     $amount = $_POST['amount'];
     $account_id = $_POST['selected_account'];
+    $recipient_account_id = $_POST['recipient_account_id'];
+    $recipient_account = $_POST['recipient_account'];
+    $recipient_name = $_POST['recipient_name'];
+    $bank = $_POST['bank'];
 
     if (empty($account_id)) {
         header("Location: index.php?status=error&message=Please+select+an+account");
@@ -15,7 +19,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $_SESSION['transaction'] = [
         'type' => $type,
         'amount' => $amount,
-        'account_id' => $account_id
+        'account_id' => $account_id,
+        'recipient_account_id' => $recipient_account_id,
+        'recipient_account' => $recipient_account,
+        'recipient_name' => $recipient_name,
+        'bank' => $bank
     ];
 
     $title = ucfirst($type);
@@ -24,11 +32,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <main class="h-screen bg-gray-100 dark:bg-gray-900">
         <div class="header">
             <div class="left">
-                <h1>Deposit</h1>
+                <h1><?php echo ucfirst($type); ?></h1>
                 <ul class="breadcrumb">
-                    /
                     <li><a href="#">Transaction</a></li>
-                    <li><a href="#" class="active">Deposit</a></li>
+                    <li><a href="#" class="active"><?php echo ucfirst($type); ?></a></li>
                 </ul>
             </div>
         </div>
@@ -41,13 +48,20 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     </div>
                     <div class="flex justify-between text-sm text-gray-500 mt-1 mb-8">
                         <div>Confirmation PIN</div>
-                        <div>Step 3 of 3</div>
+                        <div>Step <?php echo ($type == 'transfer') ? '5 of 5' : '3 of 3'; ?></div>
                     </div>
                 </div>
                 <div class="header mb-6">
                     <h1 class="text-2xl font-bold text-gray-900 dark:text-white">Confirm <?php echo ucfirst($type); ?></h1>
                 </div>
                 <form action="process_transaction.php" method="POST" class="mt-8 max-w-md mx-auto">
+                    <input type="hidden" name="type" value="<?php echo htmlspecialchars($type); ?>">
+                    <input type="hidden" name="amount" value="<?php echo htmlspecialchars($amount); ?>">
+                    <input type="hidden" name="account_id" value="<?php echo htmlspecialchars($account_id); ?>">
+                    <input type="hidden" name="recipient_account_id" value="<?php echo htmlspecialchars($recipient_account_id); ?>">
+                    <input type="hidden" name="recipient_account" value="<?php echo htmlspecialchars($recipient_account); ?>">
+                    <input type="hidden" name="recipient_name" value="<?php echo htmlspecialchars($recipient_name); ?>">
+                    <input type="hidden" name="bank" value="<?php echo htmlspecialchars($bank); ?>">
                     <div class="mb-4">
                         <label for="pin" class="block text-sm font-medium text-gray-300">Enter PIN:</label>
                         <input type="password" id="pin" name="pin" required class="mt-1 p-2 border rounded-md w-full">
