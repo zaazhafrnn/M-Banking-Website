@@ -20,7 +20,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     }
 
     // Get recipient name
-    $stmt = $conn->prepare("SELECT nama_depan FROM users WHERE id = ?");
+    $stmt = $conn->prepare("SELECT CONCAT(nama_depan, ' ', nama_belakang) AS recipient_name FROM users WHERE id = ?");
     $stmt->bind_param("i", $recipient_user_id);
     $stmt->execute();
     $stmt->bind_result($recipient_name);
@@ -38,30 +38,42 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     ob_start();
 ?>
 
-<main class="min-h-screen bg-gray-100 dark:bg-gray-900">
-    <div class="container mx-auto px-4 py-8">
-        <div class="max-w-lg mx-auto bg-white dark:bg-gray-800 rounded-lg shadow-md p-6">
-            <div class="header mb-6">
-                <h1 class="text-2xl font-bold text-white">Confirm Recipient</h1>
-                <div class="progress-bar mt-4">
+    <main class="min-h-screen bg-gray-100 dark:bg-gray-900">
+        <div class="header">
+            <div class="left">
+                <h1>Transfer</h1>
+                <ul class="breadcrumb">
+                    /
+                    <li><a href="transfer.php" class="active">Transfer</a></li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="container mx-auto px-4 py-8">
+            <div class="max-w-lg mx-auto bg-white dark:bg-gray-800 rounded-lg shadow-md p-6">
+                <div class="progress-bar mt-1">
                     <div class="w-full bg-gray-200 rounded-full h-2.5">
                         <div class="bg-blue-600 h-2.5 rounded-full" style="width: 42%;"></div>
                     </div>
-                    <div class="text-left text-sm text-gray-500 mt-1">Confirm Recipient Details</div>
-                    <div class="text-right text-sm text-gray-500 mt-1">Step 2 of 5</div>
+                    <div class="flex justify-between text-sm text-gray-500 mt-1 mb-8">
+                        <div>Confirm Recipient Details</div>
+                        <div>Step 2 of 5</div>
+                    </div>
                 </div>
+                <div class="header mb-6">
+                    <h1 class="text-2xl font-bold text-white">Confirm Recipient</h1>
+                </div>
+                <div class="mb-4 dark:text-white">
+                    <p><strong>Recipient Name:</strong> <?php echo htmlspecialchars($recipient_name); ?></p>
+                    <p><strong>Recipient Account:</strong> <?php echo htmlspecialchars($recipient_account); ?></p>
+                    <p><strong>Bank:</strong> <?php echo htmlspecialchars($bank); ?></p>
+                </div>
+                <form action="transfer_amount.php" method="POST">
+                    <button type="submit" class="w-full bg-blue-600 text-white py-2 px-4 rounded-md shadow hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 mt-6">Next</button>
+                </form>
             </div>
-            <div class="mb-4 dark:text-white">
-                <p><strong>Recipient Name:</strong> <?php echo htmlspecialchars($recipient_name); ?></p>
-                <p><strong>Recipient Account:</strong> <?php echo htmlspecialchars($recipient_account); ?></p>
-                <p><strong>Bank:</strong> <?php echo htmlspecialchars($bank); ?></p>
-            </div>
-            <form action="transfer_amount.php" method="POST">
-                <button type="submit" class="w-full bg-blue-600 text-white py-2 px-4 rounded-md shadow hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 mt-6">Next</button>
-            </form>
         </div>
-    </div>
-</main>
+    </main>
 
 <?php
     $content = ob_get_clean();

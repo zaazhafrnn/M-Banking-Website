@@ -10,11 +10,11 @@ ob_start();
 <main class="h-screen bg-gray-900">
     <div class="header">
         <div class="left">
-            <h1>Deposit</h1>
+            <h1><?php echo ucfirst($type); ?></h1>
             <ul class="breadcrumb">
                 /
                 <li><a href="#">Transaction</a></li>
-                <li><a href="#" class="active">Deposit</a></li>
+                <li><a href="#" class="active"><?php echo ucfirst($type); ?></a></li>
             </ul>
         </div>
     </div>
@@ -33,7 +33,7 @@ ob_start();
             <div class="header mb-6">
                 <h1 class="text-2xl font-bold text-gray-900 dark:text-white"><?php echo ucfirst($type); ?> Amount</h1>
             </div>
-            <form action="confirm_account.php" method="GET" class="space-y-4">
+            <form action="confirm_account.php" method="POST" class="space-y-4"> <!-- Change method to POST -->
                 <input type="hidden" name="type" value="<?php echo htmlspecialchars($type); ?>">
                 <div>
                     <label for="amount" class="block text-sm font-medium text-gray-300">Enter Amount:</label>

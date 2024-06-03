@@ -2,21 +2,26 @@
 include 'session.php';
 include 'get_account.php';
 
-$type = $_POST['type']; // deposit, withdrawal, or transfer
-$amount = $_POST['amount'];
-$recipient_account = $_POST['recipient_account'];
-$recipient_account_id = $_POST['recipient_account_id'];
-$recipient_name = $_POST['recipient_name'];
-$bank = $_POST['bank'];
+// Check if the request method is POST
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    // Retrieve form data
+    $type = $_POST['type']; // deposit, withdrawal, or transfer
+    $amount = $_POST['amount'];
 
-$title = ucfirst($type);
-$accounts = getUserAccounts($_SESSION['user_id'], $conn);
+    // For transfer transactions
+    $recipient_account = isset($_POST['recipient_account']) ? $_POST['recipient_account'] : null;
+    $recipient_account_id = isset($_POST['recipient_account_id']) ? $_POST['recipient_account_id'] : null;
+    $recipient_name = isset($_POST['recipient_name']) ? $_POST['recipient_name'] : null;
+    $bank = isset($_POST['bank']) ? $_POST['bank'] : null;
 
-$progress = ($type == 'transfer') ? '70%' : '59%'; 
-$step = ($type == 'transfer') ? '4 of 5' : '2 of 3'; 
-$next_step = 'confirm_pin.php';
+    $title = ucfirst($type);
+    $accounts = getUserAccounts($_SESSION['user_id'], $conn);
 
-ob_start();
+    $progress = ($type == 'transfer') ? '70%' : '59%'; 
+    $step = ($type == 'transfer') ? '4 of 5' : '2 of 3'; 
+    $next_step = 'confirm_pin.php';
+
+    ob_start();
 ?>
 
 <main class="min-h-screen bg-gray-900 overflow-hidden">
@@ -47,10 +52,12 @@ ob_start();
             <form action="<?php echo $next_step; ?>" method="POST">
                 <input type="hidden" name="type" value="<?php echo htmlspecialchars($type); ?>">
                 <input type="hidden" name="amount" value="<?php echo htmlspecialchars($amount); ?>">
-                <input type="hidden" name="recipient_account" value="<?php echo htmlspecialchars($recipient_account); ?>">
-                <input type="hidden" name="recipient_account_id" value="<?php echo htmlspecialchars($recipient_account_id); ?>"> <!-- Add this -->
-                <input type="hidden" name="recipient_name" value="<?php echo htmlspecialchars($recipient_name); ?>">
-                <input type="hidden" name="bank" value="<?php echo htmlspecialchars($bank); ?>">
+                <?php if ($type == 'transfer') : ?>
+                    <input type="hidden" name="recipient_account" value="<?php echo htmlspecialchars($recipient_account); ?>">
+                    <input type="hidden" name="recipient_account_id" value="<?php echo htmlspecialchars($recipient_account_id); ?>">
+                    <input type="hidden" name="recipient_name" value="<?php echo htmlspecialchars($recipient_name); ?>">
+                    <input type="hidden" name="bank" value="<?php echo htmlspecialchars($bank); ?>">
+                <?php endif; ?>
                 <div class="grid grid-cols-1 gap-6 mt-8">
                     <?php foreach ($accounts as $account) : ?>
                         <label class="flex items-center justify-start p-4 bg-gray-200 rounded-lg shadow-md cursor-pointer">
@@ -70,6 +77,11 @@ ob_start();
 </main>
 
 <?php
-$content = ob_get_clean();
-include 'layout.php';
+    $content = ob_get_clean();
+    include 'layout.php';
+} else {
+    // If not a POST request, redirect to appropriate page
+    header("Location: transfer.php");
+    exit();
+}
 ?>

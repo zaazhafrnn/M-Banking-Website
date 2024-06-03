@@ -5,10 +5,12 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $type = $_POST['type'];
     $amount = $_POST['amount'];
     $account_id = $_POST['selected_account'];
-    $recipient_account_id = $_POST['recipient_account_id'];
-    $recipient_account = $_POST['recipient_account'];
-    $recipient_name = $_POST['recipient_name'];
-    $bank = $_POST['bank'];
+
+    // For transfer transactions
+    $recipient_account_id = isset($_POST['recipient_account_id']) ? $_POST['recipient_account_id'] : null;
+    $recipient_account = isset($_POST['recipient_account']) ? $_POST['recipient_account'] : null;
+    $recipient_name = isset($_POST['recipient_name']) ? $_POST['recipient_name'] : null;
+    $bank = isset($_POST['bank']) ? $_POST['bank'] : null;
 
     if (empty($account_id)) {
         header("Location: index.php?status=error&message=Please+select+an+account");
@@ -58,10 +60,12 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     <input type="hidden" name="type" value="<?php echo htmlspecialchars($type); ?>">
                     <input type="hidden" name="amount" value="<?php echo htmlspecialchars($amount); ?>">
                     <input type="hidden" name="account_id" value="<?php echo htmlspecialchars($account_id); ?>">
-                    <input type="hidden" name="recipient_account_id" value="<?php echo htmlspecialchars($recipient_account_id); ?>">
-                    <input type="hidden" name="recipient_account" value="<?php echo htmlspecialchars($recipient_account); ?>">
-                    <input type="hidden" name="recipient_name" value="<?php echo htmlspecialchars($recipient_name); ?>">
-                    <input type="hidden" name="bank" value="<?php echo htmlspecialchars($bank); ?>">
+                    <?php if ($type == 'transfer') : ?>
+                        <input type="hidden" name="recipient_account_id" value="<?php echo htmlspecialchars($recipient_account_id); ?>">
+                        <input type="hidden" name="recipient_account" value="<?php echo htmlspecialchars($recipient_account); ?>">
+                        <input type="hidden" name="recipient_name" value="<?php echo htmlspecialchars($recipient_name); ?>">
+                        <input type="hidden" name="bank" value="<?php echo htmlspecialchars($bank); ?>">
+                    <?php endif; ?>
                     <div class="mb-4">
                         <label for="pin" class="block text-sm font-medium text-gray-300">Enter PIN:</label>
                         <input type="password" id="pin" name="pin" required class="mt-1 p-2 border rounded-md w-full">
