@@ -2,7 +2,6 @@
 include 'session.php';
 include 'get_account.php';
 
-// Check if the request method is POST
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     // Retrieve form data
     $type = $_POST['type']; // deposit, withdrawal, or transfer
@@ -17,9 +16,25 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $title = ucfirst($type);
     $accounts = getUserAccounts($_SESSION['user_id'], $conn);
 
+    // Validate the selected account
+    if (isset($_POST['selected_account'])) {
+        $selected_account = $_POST['selected_account'];
+        // Check if selected account matches recipient account
+        foreach ($accounts as $account) {
+            if ($account['id'] == $selected_account && $account['no_rekening'] == $recipient_account && $account['bank'] == $bank) {
+                // Redirect with error message
+                header("Location: transfer.php?status=error&message=Cannot+transfer+to+the+same+account.+Try+select+with+other+account");
+                exit();
+            }
+        }
+        // Proceed to confirm_pin.php
+        header("Location: confirm_pin.php");
+        exit();
+    }
+
     $progress = ($type == 'transfer') ? '70%' : '59%'; 
     $step = ($type == 'transfer') ? '4 of 5' : '2 of 3'; 
-    $next_step = 'confirm_pin.php';
+    $next_step = 'confirm_account.php';
 
     ob_start();
 ?>

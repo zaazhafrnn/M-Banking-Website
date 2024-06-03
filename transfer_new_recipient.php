@@ -21,11 +21,11 @@ ob_start();
         <div class="max-w-lg mx-auto bg-white dark:bg-gray-800 rounded-lg shadow-md p-6">
             <div class="progress-bar mt-1">
                 <div class="w-full bg-gray-200 rounded-full h-2.5">
-                    <div class="bg-blue-600 h-2.5 rounded-full" style="width: 28%;"></div>
+                    <div class="bg-blue-600 h-2.5 rounded-full" style="width: 20%;"></div>
                 </div>
                 <div class="flex justify-between text-sm text-gray-500 mt-1 mb-8">
                     <div>Select Bank and Input Account Number</div>
-                    <div>Step 1 of 3</div>
+                    <div>Step 1 of 5</div>
                 </div>
             </div>
             <div class="header mb-6">

@@ -2,10 +2,24 @@
 include 'session.php';
 include 'get_account.php';
 
+$status = isset($_GET['status']) ? $_GET['status'] : '';
+$message = isset($_GET['message']) ? urldecode($_GET['message']) : '';
+
 $title = "Transfer Funds";
 $accounts = getUserAccounts($_SESSION['user_id'], $conn);
 ob_start();
 ?>
+
+<?php if ($status && $message): ?>
+    <div class="message <?php echo htmlspecialchars($status); ?>">
+        <p><?php echo htmlspecialchars($message); ?></p>
+    </div>
+    <script>
+        setTimeout(function() {
+            document.querySelector('.message').style.display = 'none';
+        }, 5000);
+    </script>
+<?php endif; ?>
 
 <main class="min-h-screen bg-gray-100 dark:bg-gray-900">
     <div class="header">

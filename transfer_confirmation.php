@@ -15,7 +15,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $stmt->close();
 
     if (!$recipient_id) {
-        header("Location: transfer.php?status=error&message=Recipient+account+not+found");
+        header("Location: transfer.php?status=error&message=Recipient+account+not+found.+Please+try+again.");
         exit();
     }
 
