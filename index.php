@@ -37,7 +37,8 @@ ob_start();
 
     <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mt-8">
         <?php foreach ($accounts as $account): ?>
-            <div class="bg-gray-800 p-6 rounded-lg shadow-md">
+            <div class="bg-gray-900 p-6 rounded-2xlz
+             shadow-md">
                 <h2 class="text-xl font-semibold text-white"><?php echo htmlspecialchars($account['bank']); ?></h2>
                 <h2 class="text-xl font-semibold text-white">Account Number: <?php echo htmlspecialchars($account['no_rekening']); ?></h2>
                 <p class="text-white mt-2">Balance: Rp. <?php echo number_format($account['saldo'], 2, ',', '.'); ?></p>

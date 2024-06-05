@@ -5,7 +5,7 @@ $title = "Transaction";
 ob_start();
 ?>
 
-<main>
+<main class="flex flex-col h-screen">
     <div class="header">
         <div class="left">
             <h1>Transaction</h1>
@@ -16,14 +16,23 @@ ob_start();
         </div>
     </div>
 
-    <div class="bottom-data justify-center text-center">
-        <h2 class="text-yellow text-2xl mb-5">Choose Transaction Type</h2>
-        <a href="transaction_amount.php?type=deposit" class="w-5/12 bg-blue-500 text-white py-2 px-4 rounded-full mt-5 inline-block">
-            Deposit
-        </a>
-        <a href="transaction_amount.php?type=withdrawal" class="w-5/12 bg-red-500 text-white py-2 px-4 rounded-full mt-5 inline-block">
-            Withdrawal
-        </a>
+    <div class="flex flex-grow justify-center items-center">
+        <div class="w-full h-full flex p-10 gap-8">
+            <a href="transaction_amount.php?type=deposit" class="w-1/2 p-5 border-2 rounded-2xl h-full bg-gray-800 text-white flex flex-col items-center justify-center text-4xl">
+                <div class="flex items-center space-x-4 mb-4">
+                    <i class='bx bx-money text-6xl'></i>
+                    <i class='bx bx-arrow-back bx-rotate-90 text-6xl'></i>
+                </div>
+                Deposit
+            </a>
+            <a href="transaction_amount.php?type=withdrawal" class="w-1/2 p-5 border-2 rounded-2xl h-full bg-gray-800 text-white flex flex-col items-center justify-center text-4xl">
+                <div class="flex items-center space-x-4 mb-4">
+                    <i class='bx bx-money text-6xl'></i>
+                    <i class='bx bx-arrow-back bx-rotate-270 text-6xl'></i>
+                </div>
+                Withdrawal
+            </a>
+        </div>
     </div>
 </main>
 
