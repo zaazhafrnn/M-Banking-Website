@@ -24,6 +24,7 @@ function insertTransaction($conn, $transaksi_id, $account_id, $type, $amount, $d
     switch ($type) {
         case 'deposit':
             $transaction_type = 'Deposit';
+            $transaction_amount = abs($amount);
             break;
         case 'withdrawal':
             $transaction_type = 'Withdrawal';

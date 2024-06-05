@@ -1,7 +1,9 @@
 <?php
 include 'session.php';
+include 'db.php';
 include 'get_account.php';
 
+// Check if the request method is POST
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     // Retrieve form data
     $type = $_POST['type']; // deposit, withdrawal, or transfer
@@ -9,32 +11,16 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     // For transfer transactions
     $recipient_account = isset($_POST['recipient_account']) ? $_POST['recipient_account'] : null;
-    $recipient_account_id = isset($_POST['recipient_account_id']) ? $_POST['recipient_account_id'] : null;
+    $recipient_id = isset($_POST['recipient_id']) ? $_POST['recipient_id'] : null;
     $recipient_name = isset($_POST['recipient_name']) ? $_POST['recipient_name'] : null;
     $bank = isset($_POST['bank']) ? $_POST['bank'] : null;
 
     $title = ucfirst($type);
     $accounts = getUserAccounts($_SESSION['user_id'], $conn);
 
-    // Validate the selected account
-    if (isset($_POST['selected_account'])) {
-        $selected_account = $_POST['selected_account'];
-        // Check if selected account matches recipient account
-        foreach ($accounts as $account) {
-            if ($account['id'] == $selected_account && $account['no_rekening'] == $recipient_account && $account['bank'] == $bank) {
-                // Redirect with error message
-                header("Location: transfer.php?status=error&message=Cannot+transfer+to+the+same+account.+Try+select+with+other+account");
-                exit();
-            }
-        }
-        // Proceed to confirm_pin.php
-        header("Location: confirm_pin.php");
-        exit();
-    }
-
     $progress = ($type == 'transfer') ? '70%' : '59%'; 
     $step = ($type == 'transfer') ? '4 of 5' : '2 of 3'; 
-    $next_step = 'confirm_account.php';
+    $next_step = 'confirm_pin.php';
 
     ob_start();
 ?>
@@ -69,7 +55,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 <input type="hidden" name="amount" value="<?php echo htmlspecialchars($amount); ?>">
                 <?php if ($type == 'transfer') : ?>
                     <input type="hidden" name="recipient_account" value="<?php echo htmlspecialchars($recipient_account); ?>">
-                    <input type="hidden" name="recipient_account_id" value="<?php echo htmlspecialchars($recipient_account_id); ?>">
+                    <input type="hidden" name="recipient_id" value="<?php echo htmlspecialchars($recipient_id); ?>">
                     <input type="hidden" name="recipient_name" value="<?php echo htmlspecialchars($recipient_name); ?>">
                     <input type="hidden" name="bank" value="<?php echo htmlspecialchars($bank); ?>">
                 <?php endif; ?>
@@ -93,6 +79,22 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
 <?php
     $content = ob_get_clean();
+
+    // Check if the user is trying to transfer to their own account
+    if ($type == 'transfer' && isset($_POST['selected_account'])) {
+        $stmt = $conn->prepare("SELECT user_id FROM rekening WHERE id = ?");
+        $stmt->bind_param("i", $_POST['selected_account']);
+        $stmt->execute();
+        $stmt->bind_result($selected_account_user_id);
+        $stmt->fetch();
+        $stmt->close();
+
+        if ($selected_account_user_id == $_SESSION['user_id']) {
+            header("Location: transfer.php?status=error&message=You+cannot+transfer+to+your+own+account");
+            exit();
+        }
+    }
+
     include 'layout.php';
 } else {
     // If not a POST request, redirect to appropriate page
