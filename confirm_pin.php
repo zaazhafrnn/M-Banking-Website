@@ -5,8 +5,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $type = $_POST['type'];
     $amount = $_POST['amount'];
     $account_id = $_POST['selected_account'];
+    $description = isset($_POST['description']) ? $_POST['description'] : '';
 
-    // For transfer transactions
     $recipient_id = isset($_POST['recipient_id']) ? $_POST['recipient_id'] : null;
     $recipient_account = isset($_POST['recipient_account']) ? $_POST['recipient_account'] : null;
     $recipient_name = isset($_POST['recipient_name']) ? $_POST['recipient_name'] : null;
@@ -17,7 +17,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         exit();
     }
 
-    // Check if the user is trying to transfer to their own account (double-check)
     if ($type == 'transfer') {
         $stmt = $conn->prepare("SELECT no_rekening FROM rekening WHERE id = ?");
         $stmt->bind_param("i", $account_id);
@@ -32,16 +31,24 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         }
     }
 
-    // Store transaction details in session
     $_SESSION['transaction'] = [
         'type' => $type,
         'amount' => $amount,
         'account_id' => $account_id,
+        'description' => $description,
         'recipient_id' => $recipient_id,
         'recipient_account' => $recipient_account,
         'recipient_name' => $recipient_name,
         'bank' => $bank
     ];
+
+    if ($type == 'topup') {
+        $step = '3 of 3';
+    } elseif ($type == 'payment') {
+        $step = '4 of 4';
+    } elseif ($type == 'transfer') {
+        $step = '5 of 5';
+    }
 
     $title = ucfirst($type);
     ob_start();
@@ -52,7 +59,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         <div class="left">
             <h1><?php echo ucfirst($type); ?></h1>
             <ul class="breadcrumb">
-                <li><a href="#">Transaction</a></li>
+                <li><a href="transaction.php">Transaction</a></li>
                 <li><a href="#" class="active"><?php echo ucfirst($type); ?></a></li>
             </ul>
         </div>
@@ -66,7 +73,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 </div>
                 <div class="flex justify-between text-sm text-gray-500 mt-1 mb-8">
                     <div>Confirmation PIN</div>
-                    <div>Step <?php echo ($type == 'transfer') ? '5 of 5' : '3 of 3'; ?></div>
+                    <div>Step <?php echo $step; ?></div>
                 </div>
             </div>
             <div class="header mb-6">
@@ -76,6 +83,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 <input type="hidden" name="type" value="<?php echo htmlspecialchars($type); ?>">
                 <input type="hidden" name="amount" value="<?php echo htmlspecialchars($amount); ?>">
                 <input type="hidden" name="account_id" value="<?php echo htmlspecialchars($account_id); ?>">
+                <?php if (!empty($description)) : ?>
+                    <input type="hidden" name="description" value="<?php echo htmlspecialchars($description); ?>">
+                <?php endif; ?>
                 <?php if ($type == 'transfer') : ?>
                     <input type="hidden" name="recipient_id" value="<?php echo htmlspecialchars($recipient_id); ?>">
                     <input type="hidden" name="recipient_account" value="<?php echo htmlspecialchars($recipient_account); ?>">
@@ -95,8 +105,4 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 <?php
     $content = ob_get_clean();
     include 'layout.php';
-} else {
-    header("Location: transaction.php");
-    exit();
 }
-?>

@@ -22,12 +22,12 @@ function insertTransaction($conn, $transaksi_id, $account_id, $type, $amount, $d
 {
     // Determine the transaction type and amount
     switch ($type) {
-        case 'deposit':
-            $transaction_type = 'Deposit';
+        case 'topup':
+            $transaction_type = 'Top Up';
             $transaction_amount = abs($amount);
             break;
-        case 'withdrawal':
-            $transaction_type = 'Withdrawal';
+        case 'payment':
+            $transaction_type = 'Payment';
             $transaction_amount = -abs($amount);
             break;
         case 'transfer':
@@ -66,6 +66,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $account_id = $_SESSION['transaction']['account_id'];
         $type = $_SESSION['transaction']['type'];
         $amount = $_SESSION['transaction']['amount'];
+        $description = $_SESSION['transaction']['description'] ?? '';
 
         // For transfer type
         $recipient_account = $type == 'transfer' ? $_SESSION['transaction']['recipient_account'] : null;
@@ -94,23 +95,23 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $new_transaksi_id = getNextTransactionId($conn);
 
             switch ($type) {
-                case 'deposit':
-                    $description = 'Deposit into account';
+                case 'topup':
+                    $description = 'Top Up Balance';
                     if (
                         !updateBalance($conn, $account_id, $amount, true) ||
                         !insertTransaction($conn, $new_transaksi_id, $account_id, $type, $amount, $description)
                     ) {
-                        throw new Exception("Failed to process deposit");
+                        throw new Exception("Failed to process top up");
                     }
                     break;
 
-                case 'withdrawal':
-                    $description = 'Withdraw cash';
+                case 'payment':
+                    $description = 'Payment: ' . $description;
                     if (
                         !updateBalance($conn, $account_id, $amount, false) ||
                         !insertTransaction($conn, $new_transaksi_id, $account_id, $type, $amount, $description)
                     ) {
-                        throw new Exception("Failed to process withdrawal");
+                        throw new Exception("Failed to process payment");
                     }
                     break;
 
@@ -187,3 +188,4 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 }
 
 $conn->close();
+?>

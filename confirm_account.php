@@ -3,24 +3,29 @@ include 'session.php';
 include 'db.php';
 include 'get_account.php';
 
-// Check if the request method is POST
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    // Retrieve form data
-    $type = $_POST['type']; // deposit, withdrawal, or transfer
+    $type = $_POST['type'];
     $amount = $_POST['amount'];
+    $description = isset($_POST['description']) ? $_POST['description'] : '';
 
-    // For transfer transactions
     $recipient_account = isset($_POST['recipient_account']) ? $_POST['recipient_account'] : null;
     $recipient_id = isset($_POST['recipient_id']) ? $_POST['recipient_id'] : null;
     $recipient_name = isset($_POST['recipient_name']) ? $_POST['recipient_name'] : null;
     $bank = isset($_POST['bank']) ? $_POST['bank'] : null;
 
+    if ($type == 'topup') {
+        $progress = '66%';
+        $step = '2 of 3';
+    } elseif ($type == 'payment') {
+        $progress = '75%';
+        $step = '3 of 4';
+    } elseif ($type == 'transfer') {
+        $progress = '70%';
+        $step = '4 of 5';
+    }
+
     $title = ucfirst($type);
     $accounts = getUserAccounts($_SESSION['user_id'], $conn);
-
-    $progress = ($type == 'transfer') ? '70%' : '59%'; 
-    $step = ($type == 'transfer') ? '4 of 5' : '2 of 3'; 
-    $next_step = 'confirm_pin.php';
 
     ob_start();
 ?>
@@ -28,9 +33,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 <main class="min-h-screen bg-gray-900 overflow-hidden">
     <div class="header">
         <div class="left">
-            <h1><?php echo ucfirst($type); ?></h1>
+            <h1>Select Account</h1>
             <ul class="breadcrumb">
-                <li><a href="#">Transaction</a></li>
+                <li><a href="transaction.php">Transaction</a></li>
                 <li><a href="#" class="active"><?php echo ucfirst($type); ?></a></li>
             </ul>
         </div>
@@ -50,9 +55,12 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             <div class="header mb-6">
                 <h1 class="text-2xl font-bold text-white"><?php echo ucfirst($type); ?> Account</h1>
             </div>
-            <form action="<?php echo $next_step; ?>" method="POST">
+            <form action="confirm_pin.php" method="POST">
                 <input type="hidden" name="type" value="<?php echo htmlspecialchars($type); ?>">
                 <input type="hidden" name="amount" value="<?php echo htmlspecialchars($amount); ?>">
+                <?php if ($type == 'payment' && !empty($description)) : ?>
+                    <input type="hidden" name="description" value="<?php echo htmlspecialchars($description); ?>">
+                <?php endif; ?>
                 <?php if ($type == 'transfer') : ?>
                     <input type="hidden" name="recipient_account" value="<?php echo htmlspecialchars($recipient_account); ?>">
                     <input type="hidden" name="recipient_id" value="<?php echo htmlspecialchars($recipient_id); ?>">
@@ -79,25 +87,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
 <?php
     $content = ob_get_clean();
-
-    // Check if the user is trying to transfer to their own account
-    if ($type == 'transfer' && isset($_POST['selected_account'])) {
-        $stmt = $conn->prepare("SELECT user_id FROM rekening WHERE id = ?");
-        $stmt->bind_param("i", $_POST['selected_account']);
-        $stmt->execute();
-        $stmt->bind_result($selected_account_user_id);
-        $stmt->fetch();
-        $stmt->close();
-
-        if ($selected_account_user_id == $_SESSION['user_id']) {
-            header("Location: transfer.php?status=error&message=You+cannot+transfer+to+your+own+account");
-            exit();
-        }
-    }
-
     include 'layout.php';
 } else {
-    // If not a POST request, redirect to appropriate page
     header("Location: transfer.php");
     exit();
 }
