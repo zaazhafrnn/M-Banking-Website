@@ -60,6 +60,24 @@ function updateBalance($conn, $account_id, $amount, $is_credit)
     return $stmt->execute();
 }
 
+// Function to check if the transaction amount is valid based on the account balance
+function isValidTransactionAmount($conn, $account_id, $amount, $is_credit)
+{
+    // Retrieve the current balance of the account
+    $stmt = $conn->prepare("SELECT saldo FROM rekening WHERE id = ?");
+    $stmt->bind_param("i", $account_id);
+    $stmt->execute();
+    $stmt->bind_result($current_balance);
+    $stmt->fetch();
+    $stmt->close();
+
+    if ($is_credit) {
+        return true;
+    } else {
+        return ($current_balance >= $amount);
+    }
+}
+
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     if (isset($_POST['pin']) && isset($_SESSION['transaction'])) {
         $pin = $_POST['pin'];
@@ -84,6 +102,12 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
         if (strval($pin) !== strval($stored_pin)) {
             header("Location: index.php?status=error&message=Invalid+PIN");
+            exit();
+        }
+
+        // Validate transaction amount before processing
+        if (!isValidTransactionAmount($conn, $account_id, $amount, false)) {
+            header("Location: index.php?status=error&message=Insufficient+funds");
             exit();
         }
 
