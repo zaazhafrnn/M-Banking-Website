@@ -55,10 +55,12 @@ ob_start();
                     <label for="pin" class="block text-gray-300 text-sm font-bold mb-2">Enter PIN:</label>
                     <input type="password" id="pin" name="pin" class="border border-gray-500 px-3 py-2 w-full bg-gray-700 text-gray-300" required>
                 </div>
+                <input type="hidden" id="account_id" name="account_id">
                 <button type="submit" id="addSaving" class="px-4 py-2 bg-blue-500 text-white rounded">Add Saving</button>
             </div>
 
             <div id="error_message" class="text-red-500 mb-4"></div>
+            <input type="hidden" name="action" value="new">
         </form>
     </div>
 </main>
@@ -94,6 +96,7 @@ ob_start();
                 displayErrorMessage("Please select an account.");
                 return;
             }
+            document.getElementById('account_id').value = account;
             hideErrorMessage();
             showStep(++currentStep);
         });

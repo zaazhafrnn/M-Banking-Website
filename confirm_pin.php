@@ -5,6 +5,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $type = $_POST['type'];
     $amount = $_POST['amount'];
     $account_id = $_POST['selected_account'];
+    $saving_id = isset($_POST['saving_id']) ? $_POST['saving_id'] : null;
     $description = isset($_POST['description']) ? $_POST['description'] : '';
 
     $recipient_id = isset($_POST['recipient_id']) ? $_POST['recipient_id'] : null;
@@ -39,7 +40,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         'recipient_id' => $recipient_id,
         'recipient_account' => $recipient_account,
         'recipient_name' => $recipient_name,
-        'bank' => $bank
+        'bank' => $bank,
+        'saving_id' => $saving_id
     ];
 
     if ($type == 'topup') {
@@ -48,6 +50,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $step = '4 of 4';
     } elseif ($type == 'transfer') {
         $step = '5 of 5';
+    } elseif ($type == 'saving') {
+        $step = '3 of 3';
     }
 
     $title = ucfirst($type);
@@ -79,14 +83,16 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             <div class="header mb-6">
                 <h1 class="text-2xl font-bold text-gray-900 dark:text-white">Confirm <?php echo ucfirst($type); ?></h1>
             </div>
-            <form action="process_transaction.php" method="POST" class="mt-8 max-w-md mx-auto">
+            <form action="<?php echo ($type == 'saving') ? 'add_new_saving_process.php' : 'process_transaction.php'; ?>" method="POST" class="mt-8 max-w-md mx-auto">
                 <input type="hidden" name="type" value="<?php echo htmlspecialchars($type); ?>">
                 <input type="hidden" name="amount" value="<?php echo htmlspecialchars($amount); ?>">
                 <input type="hidden" name="account_id" value="<?php echo htmlspecialchars($account_id); ?>">
-                <?php if (!empty($description)) : ?>
+                <?php if ($type == 'saving'): ?>
+                    <input type="hidden" name="saving_id" value="<?php echo htmlspecialchars($saving_id); ?>">
+                    <input type="hidden" name="action" value="add_balance">
+                <?php elseif (!empty($description)): ?>
                     <input type="hidden" name="description" value="<?php echo htmlspecialchars($description); ?>">
-                <?php endif; ?>
-                <?php if ($type == 'transfer') : ?>
+                <?php elseif ($type == 'transfer'): ?>
                     <input type="hidden" name="recipient_id" value="<?php echo htmlspecialchars($recipient_id); ?>">
                     <input type="hidden" name="recipient_account" value="<?php echo htmlspecialchars($recipient_account); ?>">
                     <input type="hidden" name="recipient_name" value="<?php echo htmlspecialchars($recipient_name); ?>">
@@ -106,3 +112,4 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $content = ob_get_clean();
     include 'layout.php';
 }
+?>

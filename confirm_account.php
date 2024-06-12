@@ -5,7 +5,8 @@ include 'get_account.php';
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $type = $_POST['type'];
-    $amount = $_POST['amount'];
+    $amount = isset($_POST['amount']) ? $_POST['amount'] : null;
+    $saving_id = isset($_POST['saving_id']) ? $_POST['saving_id'] : null;
     $description = isset($_POST['description']) ? $_POST['description'] : '';
 
     $recipient_account = isset($_POST['recipient_account']) ? $_POST['recipient_account'] : null;
@@ -22,6 +23,12 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     } elseif ($type == 'transfer') {
         $progress = '70%';
         $step = '4 of 5';
+    } elseif ($type == 'saving') {
+        $progress = '60%';
+        $step = '2 of 3';
+    } else {
+        header("Location: transaction.php?status=error&message=Invalid+transaction+type");
+        exit();
     }
 
     $title = ucfirst($type);
@@ -58,10 +65,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             <form action="confirm_pin.php" method="POST">
                 <input type="hidden" name="type" value="<?php echo htmlspecialchars($type); ?>">
                 <input type="hidden" name="amount" value="<?php echo htmlspecialchars($amount); ?>">
-                <?php if ($type == 'payment' && !empty($description)) : ?>
+                <?php if ($type == 'saving'): ?>
+                    <input type="hidden" name="saving_id" value="<?php echo htmlspecialchars($saving_id); ?>">
+                <?php elseif ($type == 'payment' && !empty($description)): ?>
                     <input type="hidden" name="description" value="<?php echo htmlspecialchars($description); ?>">
-                <?php endif; ?>
-                <?php if ($type == 'transfer') : ?>
+                <?php elseif ($type == 'transfer'): ?>
                     <input type="hidden" name="recipient_account" value="<?php echo htmlspecialchars($recipient_account); ?>">
                     <input type="hidden" name="recipient_id" value="<?php echo htmlspecialchars($recipient_id); ?>">
                     <input type="hidden" name="recipient_name" value="<?php echo htmlspecialchars($recipient_name); ?>">

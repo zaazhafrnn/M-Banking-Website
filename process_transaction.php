@@ -105,8 +105,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             exit();
         }
 
-        // Validate transaction amount before processing
-        if (!isValidTransactionAmount($conn, $account_id, $amount, false)) {
+        // Validate transaction amount before processing (only for non-top-up transactions)
+        if ($type !== 'topup' && !isValidTransactionAmount($conn, $account_id, $amount, false)) {
             header("Location: index.php?status=error&message=Insufficient+funds");
             exit();
         }
