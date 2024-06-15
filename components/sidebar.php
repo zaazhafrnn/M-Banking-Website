@@ -19,8 +19,8 @@ $is_transfer_page = ($current_page == 'transfer.php');
             <a href="transaction.php"><i class='bx bx-transfer bx-rotate-90'></i>Transaction</a>
         </li>
         <li class="<?php echo $is_transfer_page ? 'active' : ''; ?>"><a href="transfer.php"><i class='bx bx-paper-plane'></i>Transfer</a></li>
-        <li class="<?php echo ($current_page == 'friends.php') ? 'active' : ''; ?>"><a href="friends.php"><i class='bx bx-group'></i>Friends</a></li>
-        <li class="<?php echo ($current_page == 'settings.php') ? 'active' : ''; ?>"><a href="settings.php"><i class='bx bx-cog'></i>Settings</a></li>
+        <!-- <li class="<?php echo ($current_page == 'friends.php') ? 'active' : ''; ?>"><a href="friends.php"><i class='bx bx-group'></i>Friends</a></li> -->
+        <!-- <li class="<?php echo ($current_page == 'settings.php') ? 'active' : ''; ?>"><a href="settings.php"><i class='bx bx-cog'></i>Settings</a></li> -->
     </ul>
     <ul class="side-menu">
         <li>

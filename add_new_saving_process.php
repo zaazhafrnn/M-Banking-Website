@@ -98,6 +98,22 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 throw new Exception("Failed to record balance transaction");
             }
             $stmt->close();
+        } elseif ($action == 'delete') {
+            $saving_id = $_POST['saving_id'];
+        
+            // Validate inputs
+            if (empty($saving_id)) {
+                throw new Exception("Invalid input");
+            }
+        
+            // Delete saving record
+            $stmt = $conn->prepare("DELETE FROM tabungan WHERE id = ?");
+            $stmt->bind_param("i", $saving_id);
+            if (!$stmt->execute()) {
+                throw new Exception("Failed to delete saving");
+            }
+            $stmt->close();
+        
         } else {
             throw new Exception("Invalid action");
         }

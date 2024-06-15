@@ -49,11 +49,23 @@ ob_start();
                     </button>
                     <div id="dropdown-<?php echo $saving['id']; ?>" class="hidden absolute right-0 mt-2 w-48 bg-gray-800 rounded-md shadow-lg z-20">
                         <a href="#" class="block px-4 py-2 text-sm text-gray-200 hover:bg-gray-700" onclick="showAddBalanceModal(<?php echo $saving['id']; ?>)">Add Balance</a>
-                        <!-- Other actions can be added here -->
+                        <a href="#" class="block px-4 py-2 text-sm text-red-500 hover:bg-gray-700 hover:text-red-500" onclick="openDeleteModal(<?php echo $saving['id']; ?>)">Delete</a>
                     </div>
                 </div>
             </div>
         <?php endforeach; ?>
+
+        <!-- Modal -->
+        <div id="deleteModal" class="fixed inset-0 flex items-center justify-center hidden">
+            <div class="absolute inset-0 bg-gray-900 opacity-75"></div>
+            <div class="bg-white p-8 rounded-lg z-10">
+                <p class="text-lg font-semibold mb-4">Are you sure you want to delete this saving?</p>
+                <div class="flex justify-end">
+                    <button class="px-4 py-2 bg-red-500 text-white rounded mr-4" onclick="deleteSaving()">Delete</button>
+                    <button class="px-4 py-2 bg-gray-300 text-gray-800 rounded" onclick="closeDeleteModal()">Cancel</button>
+                </div>
+            </div>
+        </div>
 
         <a href="add_new_saving.php" class="bg-gray-900 p-6 rounded-xl shadow-md flex justify-center items-center border-4 border-blue-500">
             <span class="text-blue-500 font-bold text-4xl">+</span>
@@ -91,6 +103,42 @@ ob_start();
 
     function closeAddBalanceModal() {
         document.getElementById('addBalanceModal').classList.add('hidden');
+    }
+
+    function openDeleteModal(savingId) {
+        document.getElementById('deleteModal').classList.remove('hidden');
+        // Store the saving ID somewhere accessible
+        window.currentSavingId = savingId;
+    }
+
+    function closeDeleteModal() {
+        document.getElementById('deleteModal').classList.add('hidden');
+        // Optionally clear the stored saving ID
+        window.currentSavingId = null;
+    }
+
+    function deleteSaving() {
+        if (window.currentSavingId) {
+            // Send AJAX request to delete the saving
+            var xhr = new XMLHttpRequest();
+            xhr.open("POST", "add_new_saving_process.php", true);
+            xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+            xhr.onreadystatechange = function() {
+                if (xhr.readyState == 4 && xhr.status == 200) {
+                    // Handle the response
+                    var response = JSON.parse(xhr.responseText);
+                    if (response.status === "success") {
+                        // Optional: Reload the page or update UI
+                        window.location.reload();
+                    } else {
+                        alert("Failed to delete saving: " + response.message);
+                    }
+                }
+            };
+            xhr.send("action=delete&saving_id=" + window.currentSavingId);
+        }
+        // Close the modal
+        closeDeleteModal();
     }
 </script>
 
